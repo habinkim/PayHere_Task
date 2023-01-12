@@ -27,7 +27,7 @@ import static java.util.Collections.singletonList;
 public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
-    @Column(length = 20)
+    @Column(length = 30)
     @Comment("사용자 이메일")
     private String email;
 

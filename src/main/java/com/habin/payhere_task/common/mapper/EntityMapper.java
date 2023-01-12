@@ -1,5 +1,6 @@
 package com.habin.payhere_task.common.mapper;
 
+import com.habin.payhere_task.category.entity.Category;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring",
@@ -11,5 +12,7 @@ import org.mapstruct.*;
 		nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface EntityMapper {
+
+	Category integerToCategory(Integer id);
 
 }

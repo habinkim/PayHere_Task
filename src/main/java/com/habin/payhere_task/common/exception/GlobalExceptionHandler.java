@@ -1,6 +1,6 @@
 package com.habin.payhere_task.common.exception;
 
-import com.habin.payhere_task.house_hold.dto.ApiResponse;
+import com.habin.payhere_task.common.dto.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
@@ -55,26 +55,6 @@ public class GlobalExceptionHandler {
 		return ApiResponse.badRequest(e.getMessage(), exception);
 	}
 
-	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<ApiResponse<String>> handleConstraintViolationException(HttpServletRequest request, HttpServletResponse response, ConstraintViolationException e) {
-		String URL = request.getRequestURL().toString();
-		String exception = new StringBuilder()
-				.append(URL)
-				.append(lineSeparator())
-				.append(GetException(e))
-				.toString();
-
-		String message = e.getConstraintViolations().stream()
-				.map(ConstraintViolation::getMessage)
-				.filter(StringUtils::hasText)
-				.collect(joining(lineSeparator(), "", ""));
-
-		log.error(e.getMessage());
-		log.error(exception);
-
-		return ApiResponse.badRequest(message, exception);
-	}
-
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ApiResponse<String>> handleMethodArgumentNotValidException(HttpServletRequest request, HttpServletResponse response, MethodArgumentNotValidException e) {
 		String URL = request.getRequestURL().toString();
@@ -86,6 +66,26 @@ public class GlobalExceptionHandler {
 
 		String message = e.getBindingResult().getAllErrors().stream()
 				.map(DefaultMessageSourceResolvable::getDefaultMessage)
+				.filter(StringUtils::hasText)
+				.collect(joining(lineSeparator(), "", ""));
+
+		log.error(e.getMessage());
+		log.error(exception);
+
+		return ApiResponse.badRequest(message, exception);
+	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<ApiResponse<String>> handleConstraintViolationException(HttpServletRequest request, HttpServletResponse response, ConstraintViolationException e) {
+		String URL = request.getRequestURL().toString();
+		String exception = new StringBuilder()
+				.append(URL)
+				.append(lineSeparator())
+				.append(GetException(e))
+				.toString();
+
+		String message = e.getConstraintViolations().stream()
+				.map(ConstraintViolation::getMessage)
 				.filter(StringUtils::hasText)
 				.collect(joining(lineSeparator(), "", ""));
 

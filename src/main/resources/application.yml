@@ -1,1 +1,47 @@
+spring:
+  application:
+    name: PayHere_Task
+  devtools:
+    restart:
+      enabled: true
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  config:
+    activate:
+      on-profile: master
+  data:
+    redis:
+      host:
+      port: 6379
+      database: 0
+      password:
+jwt:
+  accessTokenValidity: 10m
+  refreshTokenValidity: 1M
+  secret: YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=
+springdoc:
+  model-and-view-allowed: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    path: rest-api-doc.html
+    default-models-expand-depth: -1
 
+server:
+  port: 8300
+  tomcat:
+    remoteip:
+      protocol-header: x-forwarded-proto

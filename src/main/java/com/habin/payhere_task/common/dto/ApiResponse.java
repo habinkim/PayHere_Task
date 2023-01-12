@@ -1,4 +1,4 @@
-package com.habin.payhere_task.house_hold.dto;
+package com.habin.payhere_task.common.dto;
 
 import org.springframework.http.ResponseEntity;
 
