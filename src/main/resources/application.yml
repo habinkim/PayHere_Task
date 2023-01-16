@@ -5,28 +5,26 @@ spring:
     restart:
       enabled: true
   datasource:
-    url:
-    username:
-    password:
-    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/HouseHold
+    username: root
+    password: qpalzm0915
+    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MariaDBDialect
     show-sql: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  config:
-    activate:
-      on-profile: master
   data:
     redis:
-      host:
-      port: 6379
       database: 0
+      host: 127.0.0.1
+      port: 6379
+      username:
       password:
 jwt:
   accessTokenValidity: 10m

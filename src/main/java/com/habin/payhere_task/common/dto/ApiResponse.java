@@ -41,4 +41,9 @@ public record ApiResponse<T>(String message, T body) {
         return new ResponseEntity<>(apiResponse, BAD_REQUEST);
     }
 
+    public static <T> ResponseEntity<ApiResponse<T>> badRequest(String message) {
+        ApiResponse<T> apiResponse = new ApiResponse<>(message, null);
+        return new ResponseEntity<>(apiResponse, BAD_REQUEST);
+    }
+
 }

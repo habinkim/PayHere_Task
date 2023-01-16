@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpRequestDto {
+public class LoginRequestDto {
 
     @NotBlank(message = "이메일을 입력하지 않으셨습니다.")
     @Size(max = 30, message = "이메일은 30자 이내여야 합니다.")
@@ -21,11 +21,7 @@ public class SignUpRequestDto {
     private String email;
 
     @NotBlank(message = "비밀번호를 입력하지 않으셨습니다.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)[a-z\\d]{8,20}$", message = "패스워드는 영문자, 숫자 8 ~ 20자리여야 합니다.")
+    @Pattern(message = "비밀번호는 영문, 숫자를 포함한 8 ~ 20자리여야 합니다.", regexp = "^(?=.*[a-z])(?=.*[0-9]).{8,20}$")
     private String password;
-
-    @NotBlank(message = "닉네임을 입력하지 않으셨습니다.")
-    @Size(max = 20, message = "닉네임은 20자 이내여야 합니다.")
-    private String nickname;
 
 }
