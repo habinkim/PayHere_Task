@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PredicateBuilder {
@@ -32,17 +31,7 @@ public class PredicateBuilder {
 		return ExpressionUtils.allOf(predicateBuilders);
 	}
 
-	public PredicateBuilder eqUUID(ComparablePath<UUID> column, String value) {
-
-		if (StringUtils.hasText(value)) {
-			predicateBuilders.add(column.eq(UUID.fromString(value)));
-		}
-
-		return this;
-	}
-
 	public PredicateBuilder eqString(StringPath column, String value) {
-
 		if (StringUtils.hasText(value)) {
 			predicateBuilders.add(column.eq(value));
 		}
@@ -51,7 +40,6 @@ public class PredicateBuilder {
 	}
 
 	public PredicateBuilder containsString(StringPath column, String value) {
-
 		if (StringUtils.hasText(value)) {
 			predicateBuilders.add(column.contains(value));
 		}
@@ -60,7 +48,6 @@ public class PredicateBuilder {
 	}
 
 	public PredicateBuilder containsStringDesc(StringPath column1, StringPath column2, String value) {
-
 		if (StringUtils.hasText(value)) {
 			predicateBuilders.add(new BooleanBuilder()
 					.andAnyOf(column2.contains(value), column2.contains(value)));
@@ -70,7 +57,6 @@ public class PredicateBuilder {
 	}
 
 	public PredicateBuilder inString(StringPath column, List<String> value) {
-
 		if (value != null) {
 			predicateBuilders.add(column.in(value));
 		}
@@ -78,8 +64,19 @@ public class PredicateBuilder {
 		return this;
 	}
 
-	public PredicateBuilder eqLong(NumberPath<Long> column, Long value) {
+	public <N extends Number & Comparable<?>> PredicateBuilder betweenNumberDynamic(NumberPath<N> column, N min, N max) {
+		if (min != null) {
+			predicateBuilders.add(column.goe(min));
+		}
 
+		if (max != null) {
+			predicateBuilders.add(column.loe(max));
+		}
+
+		return this;
+	}
+
+	public <N extends Number & Comparable<?>> PredicateBuilder eqNumber(NumberPath<N> column, N value) {
 		if (value != null) {
 			predicateBuilders.add(column.eq(value));
 		}
@@ -87,8 +84,7 @@ public class PredicateBuilder {
 		return this;
 	}
 
-	public PredicateBuilder neLong(NumberPath<Long> column, Long value) {
-
+	public <N extends Number & Comparable<?>> PredicateBuilder neNumber(NumberPath<N> column, N value) {
 		if (value != null) {
 			predicateBuilders.add(column.ne(value));
 		}
@@ -96,10 +92,9 @@ public class PredicateBuilder {
 		return this;
 	}
 
-	public PredicateBuilder inLong(NumberPath<Long> column, List<Long> value) {
-
-		if (value != null) {
-			predicateBuilders.add(column.in(value));
+	public <N extends Number & Comparable<?>> PredicateBuilder inLong(NumberPath<N> column, List<N> valueList) {
+		if (valueList != null) {
+			predicateBuilders.add(column.in(valueList));
 		}
 
 		return this;
@@ -124,7 +119,6 @@ public class PredicateBuilder {
 	}
 
 	public PredicateBuilder betweenDateTime(DateTimePath<LocalDateTime> column, LocalDateTime startDate, LocalDateTime endDate) {
-
 		if (startDate != null && endDate != null) {
 			predicateBuilders.add(column.between(startDate, endDate));
 		}

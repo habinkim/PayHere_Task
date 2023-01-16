@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-import static com.habin.payhere_task.common.enums.Role.USER;
+import static com.habin.payhere_task.common.security.Role.USER;
 import static java.util.Collections.singletonList;
 
 @SuperBuilder(toBuilder = true)

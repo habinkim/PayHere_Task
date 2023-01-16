@@ -1,6 +1,7 @@
 package com.habin.payhere_task.house_hold.entity;
 
 import com.habin.payhere_task.common.entity.BaseEntity;
+import com.habin.payhere_task.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @SuperBuilder(toBuilder = true)
@@ -42,5 +44,9 @@ public class HouseHold extends BaseEntity {
     @Column(nullable = false)
     @Comment("삭제 여부")
     private Boolean isDeleted;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "userEmail", referencedColumnName = "email")
+    private User user;
 
 }

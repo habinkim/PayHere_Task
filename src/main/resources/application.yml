@@ -26,17 +26,20 @@ spring:
       port: 6379
       username:
       password:
+
 jwt:
   accessTokenValidity: 10m
   refreshTokenValidity: 1M
   secret: YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=YnBucy1oZXBjLWJhY2tlbmQtanNvbndlYnRva2VuLXNlY3JldEtleQo=
+
 springdoc:
   model-and-view-allowed: true
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
   swagger-ui:
-    path: rest-api-doc.html
+    path: /swagger-ui.html
     default-models-expand-depth: -1
+  enable-native-support: true
 
 server:
   port: 8300
