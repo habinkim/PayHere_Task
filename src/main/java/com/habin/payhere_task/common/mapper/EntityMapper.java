@@ -1,5 +1,6 @@
 package com.habin.payhere_task.common.mapper;
 
+import com.habin.payhere_task.user.entity.User;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring",
@@ -11,5 +12,5 @@ import org.mapstruct.*;
 		nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface EntityMapper {
-
+	User stringToUser(String email);
 }

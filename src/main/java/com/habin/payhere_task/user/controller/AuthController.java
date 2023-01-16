@@ -42,7 +42,7 @@ public class AuthController {
     @Operation(summary = "로그아웃", description = "로그아웃 API")
     @SecurityRequirement(name = "TOKEN")
     @GetMapping("/logoutUser")
-    public ResponseEntity<ApiResponse<?>> logout() {
+    public ResponseEntity<ApiResponse<String>> logout() {
         return authService.logout();
     }
 

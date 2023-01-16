@@ -1,7 +1,11 @@
 package com.habin.payhere_task.house_hold.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.habin.payhere_task.house_hold.validation.annotation.AmountRange;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,8 +28,7 @@ public class HouseHoldListRequestDto {
     @Min(value = 10, message = "페이지당 크기는 10 이상의 정수를 입력해주세요.")
     private Integer pageSize = 10;
 
-    @NotBlank(message = "사용자 이메일을 입력해주세요.")
-    @Size(max = 30, message = "사용자 이메일은 30자 이하로 입력해주세요.")
+    @JsonIgnore
     private String userEmail;
 
     @Size(max = 30, message = "카테고리는 30자 이하로 입력해주세요.")

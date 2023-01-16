@@ -81,4 +81,12 @@ public class QHouseHoldRepositoryImpl implements QHouseHoldRepository {
                 .where(houseHold.houseHoldId.eq(houseHoldId))
                 .fetchFirst();
     }
+
+    @Override
+    public long updateIsDeleted(List<Long> id, Boolean isDeleted) {
+        return queryFactory.update(houseHold)
+                .set(houseHold.isDeleted, isDeleted)
+                .where(houseHold.houseHoldId.in(id))
+                .execute();
+    }
 }

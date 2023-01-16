@@ -8,8 +8,10 @@ import jakarta.validation.ConstraintValidatorContext;
 public class AmountRangeValidator implements ConstraintValidator<AmountRange, HouseHoldListRequestDto> {
     @Override
     public boolean isValid(HouseHoldListRequestDto value, ConstraintValidatorContext context) {
-        return value.getMinAmount() != null &&
-                value.getMaxAmount() != null &&
-                value.getMinAmount() <= value.getMaxAmount();
+        if (value.getMinAmount() != null && value.getMaxAmount() != null) {
+            return value.getMinAmount() <= value.getMaxAmount();
+        }
+
+        return true;
     }
 }

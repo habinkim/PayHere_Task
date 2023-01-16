@@ -21,6 +21,10 @@ public class JwtProperty {
     private Duration accessTokenValidity;
     private Duration refreshTokenValidity;
 
+    public Duration getAccessTokenValidityDuration() {
+        return accessTokenValidity;
+    }
+
     public Long getAccessTokenValidity() {
         return accessTokenValidity.toMillis();
     }

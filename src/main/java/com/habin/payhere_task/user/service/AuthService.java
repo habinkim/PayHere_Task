@@ -4,22 +4,32 @@ import com.habin.payhere_task.common.dto.ApiResponse;
 import com.habin.payhere_task.common.security.JwtTokenProvider;
 import com.habin.payhere_task.common.security.token.AccessToken;
 import com.habin.payhere_task.common.security.token.RefreshToken;
+import com.habin.payhere_task.common.yml.JwtProperty;
 import com.habin.payhere_task.user.dto.LoginRequestDto;
 import com.habin.payhere_task.user.dto.SignUpRequestDto;
 import com.habin.payhere_task.user.entity.User;
 import com.habin.payhere_task.user.mapper.UserMapper;
 import com.habin.payhere_task.user.repository.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes;
+
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,6 +39,10 @@ public class AuthService {
     private final UserMapper userMapper;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final RedisTemplate<String, AccessToken> redisTemplateAccess;
+    private final RedisTemplate<String, RefreshToken> redisTemplateRefresh;
+    private final RedisTemplate<String, Object> redisTemplateObject;
+    private final JwtProperty jwtProperty;
 
     @Transactional
     public ResponseEntity<ApiResponse<Object>> signUp(SignUpRequestDto signUpRequestDto) {
@@ -65,8 +79,41 @@ public class AuthService {
     }
 
     @Transactional
-    public ResponseEntity<ApiResponse<?>> logout() {
-        return null;
+    public ResponseEntity<ApiResponse<String>> logout() {
+        HttpServletRequest request = ((ServletRequestAttributes) currentRequestAttributes()).getRequest();
+        ValueOperations<String, AccessToken> accessVop = redisTemplateAccess.opsForValue();
+        ValueOperations<String, RefreshToken> refreshVop = redisTemplateRefresh.opsForValue();
+        ValueOperations<String, Object> objectVop = redisTemplateObject.opsForValue();
+
+        String userEmail = null;
+        String accessToken = jwtTokenProvider.resolveToken(request);
+
+        try {
+            userEmail = jwtTokenProvider.getEmailFromToken(accessToken);
+        } catch (IllegalArgumentException ignored) {
+        } catch (ExpiredJwtException e) {
+            userEmail = e.getClaims().getSubject();
+            log.info("user_id from expired access token : " + userEmail);
+        }
+
+        if (accessVop.get("access_" + userEmail) != null) {
+            redisTemplateAccess.delete("access_" + userEmail);
+        }
+
+        try {
+            RefreshToken refreshTokenObject = refreshVop.get("refresh_" + userEmail);
+            if (refreshTokenObject != null) {
+                redisTemplateAccess.delete("refresh_" + userEmail);
+                objectVop.set(accessToken, true);
+                redisTemplateObject.expire(accessToken, jwtProperty.getAccessTokenValidityDuration());
+            }
+        } catch (IllegalArgumentException e) {
+            log.warn("user does not exist");
+        }
+
+        log.info(" logout ing : " + accessToken);
+
+        return ApiResponse.success("로그아웃 되었습니다.");
     }
 
     @Transactional

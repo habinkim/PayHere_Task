@@ -31,7 +31,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Comment("사용자 이메일")
     private String email;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 100, nullable = false)
     @Comment("사용자 패스워드")
     private String password;
 
