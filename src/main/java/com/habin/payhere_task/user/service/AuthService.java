@@ -6,6 +6,7 @@ import com.habin.payhere_task.common.security.token.AccessToken;
 import com.habin.payhere_task.common.security.token.RefreshToken;
 import com.habin.payhere_task.common.yml.JwtProperty;
 import com.habin.payhere_task.user.dto.LoginRequestDto;
+import com.habin.payhere_task.user.dto.RefreshRequestDto;
 import com.habin.payhere_task.user.dto.SignUpRequestDto;
 import com.habin.payhere_task.user.entity.User;
 import com.habin.payhere_task.user.mapper.UserMapper;
@@ -117,7 +118,16 @@ public class AuthService {
     }
 
     @Transactional
-    public ResponseEntity<ApiResponse<?>> refresh() {
-        return null;
+    public ResponseEntity<ApiResponse<Object>> refresh(RefreshRequestDto dto) {
+        if (!jwtTokenProvider.isRefreshTokenExpired(dto.getRefreshToken())) { // refresh token 만료되지 않았을때 -> 여기서 예외가 터짐
+            String userId = jwtTokenProvider.getEmailFromToken(dto.getRefreshToken()); // access_token에서 user_id 가져옴(유효성 검사)
+            User user = userRepository.findById(userId).orElseThrow((() -> new NoSuchElementException("가입되지 않은 계정입니다.")));
+
+            AccessToken newAccessToken = jwtTokenProvider.createAccessToken(user.getEmail());
+
+            return ApiResponse.success(newAccessToken);
+        } else { // refresh 토큰 expire
+            return ApiResponse.badRequest("refreshToken이 만료되었습니다. 다시 로그인해주세요.");
+        }
     }
 }

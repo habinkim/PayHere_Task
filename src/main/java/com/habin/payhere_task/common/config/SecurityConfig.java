@@ -37,7 +37,7 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
 
     private static final String[] NOT_NEED_TOKEN_URLS = {"/swagger-ui/**", "/swagger-ui/index.html", "/v3/api-docs/**",
-            "/swagger-ui.html", "/signUp", "/login", "/static/**", "/css/**", "/js/**", "/img/**",
+            "/swagger-ui.html", "/signUp", "/login", "/refresh", "/static/**", "/css/**", "/js/**", "/img/**",
             "/lib/**", "/manifest.json", "/lodash.json"};
 
     /**

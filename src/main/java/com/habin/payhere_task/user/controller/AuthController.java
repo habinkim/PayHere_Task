@@ -2,6 +2,7 @@ package com.habin.payhere_task.user.controller;
 
 import com.habin.payhere_task.common.dto.ApiResponse;
 import com.habin.payhere_task.user.dto.LoginRequestDto;
+import com.habin.payhere_task.user.dto.RefreshRequestDto;
 import com.habin.payhere_task.user.dto.SignUpRequestDto;
 import com.habin.payhere_task.user.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,10 +49,9 @@ public class AuthController {
 
     @Tag(name = "인증 관리", description = "인증 관리 API")
     @Operation(summary = "Access Token 재발급", description = "Access Token 재발급 API")
-    @SecurityRequirement(name = "TOKEN")
-    @GetMapping("/refresh")
-    public ResponseEntity<ApiResponse<?>> refresh() {
-        return authService.refresh();
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<Object>> refresh(@RequestBody RefreshRequestDto dto) {
+        return authService.refresh(dto);
     }
 
 }
